@@ -26,20 +26,18 @@ from skfuzzy import control as ctrl
 # New Antecedent/Consequent objects hold universe variables and membership
 # functions
 rainChance = ctrl.Antecedent(np.arange(0, 11, 1), 'rainChance')
-temperature = ctrl.Antecedent(np.arange(0, 11, 1), 'temperature')
+temperature = ctrl.Antecedent(np.arange(11, 0, -1), 'temperature')
 windPower = ctrl.Antecedent(np.arange(0, 11, 1), 'windPower')
 should_I_drive_a_car = ctrl.Consequent(np.arange(0, 101, 1), 'should_I_drive_a_car', 'centroid')
-
 
 rainChance.automf(3)
 temperature.automf(3)
 windPower.automf(3)
 
 #Membership functions
-
 should_I_drive_a_car['low'] = fuzz.trimf(should_I_drive_a_car.universe, [0, 0, 30])
-should_I_drive_a_car['medium'] = fuzz.trimf(should_I_drive_a_car.universe, [0, 30, 100])
-should_I_drive_a_car['high'] = fuzz.trimf(should_I_drive_a_car.universe, [30, 100, 100])
+should_I_drive_a_car['medium'] = fuzz.trimf(should_I_drive_a_car.universe, [25, 40, 60])
+should_I_drive_a_car['high'] = fuzz.trimf(should_I_drive_a_car.universe, [50, 100, 100])
 
 
 rainChance['average'].view()
@@ -59,22 +57,17 @@ windPower.view()
 should_I_drive_a_car.view()
 
 # poor | average | good 
-rule1 = ctrl.Rule(rainChance['good'] | temperature['poor'] | windPower['good'], should_I_drive_a_car['high'])
-rule2 = ctrl.Rule(rainChance['average'] | temperature['average'] | windPower['average'], should_I_drive_a_car['medium'])
+rule1 = ctrl.Rule(rainChance['good'] & temperature['poor'] & windPower['good'], should_I_drive_a_car['high'])
+rule2 = ctrl.Rule(rainChance['average'] & temperature['average'] & windPower['average'], should_I_drive_a_car['medium'])
 rule3 = ctrl.Rule(rainChance['poor'] | temperature['good'] | windPower['poor'], should_I_drive_a_car['low'])
 
-
-
 car_picking_ctrl = ctrl.ControlSystem([rule1, rule2, rule3])
-
-
-
 car_picking = ctrl.ControlSystemSimulation(car_picking_ctrl)
 
 # We specify our inputs here
-car_picking.input['rainChance'] = 100
-car_picking.input['windPower'] = 100
-car_picking.input['temperature'] = 100
+car_picking.input['rainChance'] = 10.0
+car_picking.input['windPower'] = 6.0
+car_picking.input['temperature'] = 0.0
 
 car_picking.compute()
 
