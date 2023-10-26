@@ -28,7 +28,7 @@ from skfuzzy import control as ctrl
 rainChance = ctrl.Antecedent(np.arange(0, 11, 1), 'rainChance')
 temperature = ctrl.Antecedent(np.arange(0, 11, 1), 'temperature')
 windPower = ctrl.Antecedent(np.arange(0, 11, 1), 'windPower')
-should_I_drive_a_car = ctrl.Consequent(np.arange(0, 11, 1), 'should_I_drive_a_car', 'centroid')
+should_I_drive_a_car = ctrl.Consequent(np.arange(0, 101, 1), 'should_I_drive_a_car', 'centroid')
 
 
 rainChance.automf(3)
@@ -41,6 +41,22 @@ should_I_drive_a_car['low'] = fuzz.trimf(should_I_drive_a_car.universe, [0, 0, 3
 should_I_drive_a_car['medium'] = fuzz.trimf(should_I_drive_a_car.universe, [0, 30, 100])
 should_I_drive_a_car['high'] = fuzz.trimf(should_I_drive_a_car.universe, [30, 100, 100])
 
+
+rainChance['average'].view()
+"""
+.. image:: PLOT2RST.current_figure
+"""
+temperature.view()
+"""
+.. image:: PLOT2RST.current_figure
+"""
+
+windPower.view()
+"""
+.. image:: PLOT2RST.current_figure
+"""
+
+should_I_drive_a_car.view()
 
 # poor | average | good 
 rule1 = ctrl.Rule(rainChance['good'] | temperature['poor'] | windPower['good'], should_I_drive_a_car['high'])
