@@ -39,26 +39,9 @@ should_I_drive_a_car['low'] = fuzz.trimf(should_I_drive_a_car.universe, [0, 0, 3
 should_I_drive_a_car['medium'] = fuzz.trimf(should_I_drive_a_car.universe, [25, 40, 60])
 should_I_drive_a_car['high'] = fuzz.trimf(should_I_drive_a_car.universe, [50, 100, 100])
 
-
-rainChance['average'].view()
-"""
-.. image:: PLOT2RST.current_figure
-"""
-temperature.view()
-"""
-.. image:: PLOT2RST.current_figure
-"""
-
-windPower.view()
-"""
-.. image:: PLOT2RST.current_figure
-"""
-
-should_I_drive_a_car.view()
-
 # poor | average | good 
-rule1 = ctrl.Rule(rainChance['good'] & temperature['poor'] & windPower['good'], should_I_drive_a_car['high'])
-rule2 = ctrl.Rule(rainChance['average'] & temperature['average'] & windPower['average'], should_I_drive_a_car['medium'])
+rule1 = ctrl.Rule(rainChance['good'] | temperature['poor'] | windPower['good'], should_I_drive_a_car['high'])
+rule2 = ctrl.Rule(rainChance['average'] | temperature['average'] | windPower['average'], should_I_drive_a_car['medium'])
 rule3 = ctrl.Rule(rainChance['poor'] | temperature['good'] | windPower['poor'], should_I_drive_a_car['low'])
 
 car_picking_ctrl = ctrl.ControlSystem([rule1, rule2, rule3])
@@ -72,6 +55,6 @@ car_picking.input['temperature'] = 0.0
 car_picking.compute()
 
 # We can view the result as well as visualize it
-print(car_picking.output['should_I_drive_a_car'])
+print("Am I supposed to drive a car [%]: ", car_picking.output['should_I_drive_a_car'])
 should_I_drive_a_car.view(sim=car_picking)
 input()
