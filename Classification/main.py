@@ -8,7 +8,7 @@ import category_encoders as ce
 import pandas as pd
 
 dataset = load_wine()
-
+print ('############ WINE ###############')
 X = dataset.data
 y = dataset.target
 X_train, X_test, y_train, y_test = train_test_split(X,y, stratify=y, random_state=42)
@@ -42,8 +42,8 @@ svm_model.fit(X_train, y_train)
 
 svm_y_pred = svm_model.predict(X_test)
 print('SVM accuracy (wine):', accuracy_score(y_test, svm_y_pred), "(%s)" % svm_kernel)
-# print('Confusion Matrix:\n', confusion_matrix(y_test, svm_y_pred))
-# print('Classification Report:\n', classification_report(y_test, svm_y_pred))
+print('Confusion Matrix:\n', confusion_matrix(y_test, svm_y_pred))
+print('Classification Report:\n', classification_report(y_test, svm_y_pred))
 
 
 ######################################################################################################
@@ -55,8 +55,8 @@ df = pd.read_csv(path, header=None)
 cols = ['buying_price', 'maintenance_cost', 'door_num', 'seats', 'lug_boot', 'safety', 'class']
 df.columns = cols
 
-print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-
+print("\n\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n\n")
+print ('######### CAR EVALUATION ##########')
 ###
 ### Decision Tree Classifier - Car Evaluation
 ###
@@ -93,3 +93,5 @@ svm_model.fit(X_train, y_train)
 
 svm_y_pred = svm_model.predict(X_test)
 print('SVM accuracy (car evaluation):', accuracy_score(y_test, svm_y_pred), "(%s)" % svm_kernel)
+print('SVM confusion matrix:\n', confusion_matrix(y_test, svm_y_pred))
+print('SVM classification report:\n', classification_report(y_test, svm_y_pred))
