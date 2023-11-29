@@ -1,5 +1,9 @@
 """ Authors:Damian Kreft, Sebastian Kreft
-    Required environment: Python3, scikit-learn, category_encoders, pandas"""
+    Required environment: Python3, scikit-learn, category_encoders, pandas
+    
+    In dataset wine quality the goal is to determine qality of wine based on various parameters
+    In cars evaluation dataset the goal is to find optimal car models offering good comfort/price ratio
+    """
 
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_wine
