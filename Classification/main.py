@@ -41,6 +41,7 @@ svm_model = SVC(C=1, kernel=svm_kernel)
 svm_model.fit(X_train, y_train)
 
 svm_y_pred = svm_model.predict(X_test)
+print()
 print('SVM accuracy (wine):', accuracy_score(y_test, svm_y_pred), "(%s)" % svm_kernel)
 print('Confusion Matrix:\n', confusion_matrix(y_test, svm_y_pred))
 print('Classification Report:\n', classification_report(y_test, svm_y_pred))
