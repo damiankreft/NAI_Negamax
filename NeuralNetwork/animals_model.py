@@ -1,3 +1,10 @@
+""" Authors:Damian Kreft, Sebastian Kreft
+    Required environment: python, tensorflow, numpy, matplotlib
+
+    This file contains animal classification machine learning model
+  
+    """
+
 import tensorflow as tf   
 import numpy as np
 import matplotlib.pyplot as plt
