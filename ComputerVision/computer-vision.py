@@ -1,9 +1,15 @@
+from time import sleep
 import numpy as np
 import math
 import cv2 as cv
+import subprocess
+import datetime
 
 cap = cv.VideoCapture(0)
 cap.set(cv.CAP_PROP_FOURCC, cv.VideoWriter_fourcc(*"MJPG"))
+
+time = datetime.datetime.now()
+lastActionId = 1
 
 while (True):
     _, img = cap.read()
@@ -13,27 +19,27 @@ while (True):
     value = (35, 35)
     blurred_ = cv.GaussianBlur(grey, value, 0)
     # _, thresholded = cv.threshold(blurred_, 127, 255, cv.THRESH_BINARY_INV + cv.THRESH_OTSU)
-    _, thresholded = cv.threshold(blurred_, 64, 255, cv.THRESH_OTSU)
+    _, threshold = cv.threshold(blurred_, 127, 255, cv.THRESH_BINARY_INV + cv.THRESH_OTSU)
 
-    contours, hierarchy = cv.findContours(thresholded.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-    count1 = max(contours, key=lambda x: cv.contourArea(x))
-    x, y, w, h = cv.boundingRect(count1)
+    contours, hierarchy = cv.findContours(threshold.copy(), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    contours1 = max(contours, key=lambda x: cv.contourArea(x))
+    x, y, w, h = cv.boundingRect(contours1)
     cv.rectangle(crop_img, (x, y), (x + w, y + h), (0, 0, 255), 0)
-    hull = cv.convexHull(count1)
+    hull = cv.convexHull(contours1)
     drawing = np.zeros(crop_img.shape, np.uint8)
-    cv.drawContours(drawing, [count1], 0, (0, 255, 0), 0)
+    cv.drawContours(drawing, [contours1], 0, (0, 255, 0), 0)
     cv.drawContours(drawing, [hull], 0, (0, 0, 255), 0)
-    hull = cv.convexHull(count1, returnPoints=False)
-    defects = cv.convexityDefects(count1, hull)
+    hull = cv.convexHull(contours1, returnPoints=False)
+    defects = cv.convexityDefects(contours1, hull)
 
     count_defects = 0
-    cv.drawContours(thresholded, contours, -1, (0, 255, 0), 3)
+    cv.drawContours(threshold, contours, -1, (0, 255, 0), 3)
 
     for i in range(defects.shape[0]):
         s, e, f, d = defects[i, 0]
-        start = tuple(count1[s][0])
-        end = tuple(count1[e][0])
-        far = tuple(count1[f][0])
+        start = tuple(contours1[s][0])
+        end = tuple(contours1[e][0])
+        far = tuple(contours1[f][0])
         a = math.sqrt((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2)
         b = math.sqrt((far[0] - start[0]) ** 2 + (far[1] - start[1]) ** 2)
         c = math.sqrt((end[0] - far[0]) ** 2 + (end[1] - far[1]) ** 2)
@@ -45,7 +51,26 @@ while (True):
 
         cv.line(crop_img, start, end, [0, 255, 0], 2)
 
-    text = str(count_defects + 1) + " finger(s)"
+    # print("countDefects before ", count_defects)
+    text = str(count_defects) + " finger(s)"
+    if (datetime.datetime.now() - time).seconds > 2 and count_defects != 1:
+        time = datetime.datetime.now()
+        
+        if count_defects == 1:
+            # nothing to do
+            pass
+        elif count_defects == 2 and lastActionId == 2:
+            print("2 fingers")
+            subprocess.run(["C:\\Program Files\\Mozilla Firefox\\firefox.exe"])
+        elif count_defects == 3 and lastActionId == 3:
+            print("3 fingers")
+        elif count_defects == 4 and lastActionId == 4:
+            print("4 fingers")
+        elif count_defects == 5 and lastActionId == 5:
+            print("5 fingers")
+
+        lastActionId = count_defects
+
     cv.putText(img, text, (50, 50), cv.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), thickness=3)
     cv.imshow('Captured picture', img)
     cv.imshow('Contour helper window', drawing)
