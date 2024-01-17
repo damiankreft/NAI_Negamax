@@ -51,23 +51,24 @@ while (True):
 
         cv.line(crop_img, start, end, [0, 255, 0], 2)
 
-    # print("countDefects before ", count_defects)
     text = str(count_defects) + " finger(s)"
     if (datetime.datetime.now() - time).seconds > 2 and count_defects != 1:
         time = datetime.datetime.now()
         
         if count_defects == 1:
-            # nothing to do
-            pass
+            break
         elif count_defects == 2 and lastActionId == 2:
             print("2 fingers")
-            subprocess.run(["C:\\Program Files\\Mozilla Firefox\\firefox.exe"])
+            subprocess.run(["C:\\Program Files\\Mozilla Firefox\\firefox.exe", "https://www.youtube.com/watch?v=jC3pGcRHeQ0"])
         elif count_defects == 3 and lastActionId == 3:
             print("3 fingers")
+            subprocess.run(["C:\\Program Files\\Mozilla Firefox\\firefox.exe", "https://gakko.pjwstk.edu.pl"])
         elif count_defects == 4 and lastActionId == 4:
             print("4 fingers")
+            subprocess.run(["notepad", str(datetime.datetime.now())])
         elif count_defects == 5 and lastActionId == 5:
             print("5 fingers")
+            subprocess.run(["shutdown", "/i"])
 
         lastActionId = count_defects
 
