@@ -1,5 +1,5 @@
 """ Authors:Damian Kreft, Sebastian Kreft
-    Required environment: Python3, opencv-python """
+    Required environment: Python3, gymnasium, syable_baseline3"""
 
 import gymnasium as gym
 from stable_baselines3.common.atari_wrappers import EpisodicLifeEnv 
@@ -20,3 +20,5 @@ def game():
 
     model.learn(total_timesteps = 1e6,
                 tb_log_name     = 'rl_game_breakout')
+
+game()
