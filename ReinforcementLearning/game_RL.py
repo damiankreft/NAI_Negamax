@@ -1,10 +1,14 @@
+""" Authors:Damian Kreft, Sebastian Kreft
+    Required environment: Python3, opencv-python """
+
 import gymnasium as gym
-import time
 from stable_baselines3.common.atari_wrappers import EpisodicLifeEnv 
 from stable_baselines3 import PPO
 import os
 
 def game():
+    """Program is a bot that plays game Breakout, created with use of reinforcement learning.
+    """
     env = gym.make('Breakout-v4', render_mode='human')
     env = EpisodicLifeEnv(env)
 
